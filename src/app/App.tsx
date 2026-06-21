@@ -121,7 +121,7 @@ export default function App() {
               </div>
 
               {/* Form Content */}
-              <div className="flex-1 overflow-y-auto pb-24">
+              <div className="flex-1 overflow-y-auto pb-6">
                 <form onSubmit={handleSubmit} className="p-4 space-y-4">
                   
                   {/* Selector Cuenta a debitar (Añadido según la interfaz oscura) */}
@@ -327,7 +327,7 @@ export default function App() {
               className="flex-1 flex flex-col bg-black text-white"
             >
               {/* Success Content */}
-              <div className="flex-1 overflow-y-auto p-6 pb-24">
+              <div className="flex-1 overflow-y-auto p-6 pb-6">
                 <div className="space-y-6">
                   {/* Success Banner */}
                   <motion.div
@@ -439,7 +439,7 @@ export default function App() {
         </AnimatePresence>
 
         {/* Bottom Navigation */}
-        <div className="absolute bottom-0 left-0 right-0 bg-[#121212] border-t border-[#222] text-white w-full">
+        <div className="bg-[#121212] border-t border-[#222] text-white w-full mt-auto shrink-0 z-10">
           <div className="flex items-center justify-around py-2">
             <button className="flex flex-col items-center gap-1 p-2 min-w-[60px] text-gray-400 hover:text-white">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
