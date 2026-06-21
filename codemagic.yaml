@@ -1,0 +1,21 @@
+workflows:
+  react-native-android:
+    name: React Native Android APK
+    max_build_duration: 60
+    instance_type: mac_mini_m1
+    environment:
+      node: latest
+    triggering:
+      events:
+        - push
+    scripts:
+      - name: Instalar dependencias del proyecto
+        script: |
+          npm install
+      - name: Compilar APK de Android
+        script: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleRelease
+    artifacts:
+      - android/app/build/outputs/apk/release/*.apk

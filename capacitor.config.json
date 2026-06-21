@@ -1,0 +1,6 @@
+{
+  "appId": "com.figma.mymakefile",
+  "appName": "Figma My Make File",
+  "webDir": "dist",
+  "bundledWebRuntime": false
+}
