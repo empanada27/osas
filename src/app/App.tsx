@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Bell, Menu, ChevronDown, ArrowLeft, Share2, Copy } from "lucide-react";
-import bdvLogo from "@/imports/20260621_162628.jpg";
+import bdvLogo from "@/imports/logo-bdv.png";
 import navBarImage from "@/app/assets/nav-bar-bdv.png";
 import { ImageWithFallback } from "@/app/components/figma/ImageWithFallback";
 
