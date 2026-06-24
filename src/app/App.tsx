@@ -4,14 +4,19 @@ import bdvLogo from "@/imports/logo-bdv.png";
 import navBarImage from "@/app/assets/nav-bar-bdv.png";
 import { ImageWithFallback } from "@/app/components/figma/ImageWithFallback";
 
-const BG_MAIN      = "#2a2a2a";
-const FIELD_BG     = "#3a3a3a";
-const BORDER_REST  = "#666666";
+/* ═══════════════════════════════════════════════════════════
+   PALETA EXACTA
+   ═══════════════════════════════════════════════════════════ */
+const BG_MAIN = "#2a2a2a";
+const FIELD_BG = "#3a3a3a";
+const BORDER_REST = "#666666";
 const BORDER_FOCUS = "#9333ea";
-const BTN_PURPLE   = "#7e22ce";
-const TEXT_MUTED   = "#b0b0b0";
-const TEXT_WHITE   = "#ffffff";
+const BTN_PURPLE = "#7e22ce";
+const TEXT_MUTED = "#b0b0b0";
 
+/* ═══════════════════════════════════════════════════════════
+   BANCOS
+   ═══════════════════════════════════════════════════════════ */
 const BANKS = [
   "0102 - BANCO DE VENEZUELA",
   "0156 - 100% BANCO",
@@ -52,6 +57,9 @@ function formatDate(d: Date) {
   return `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}/${d.getFullYear()}`;
 }
 
+/* ═══════════════════════════════════════════════════════════
+   OUTLINED INPUT
+   ═══════════════════════════════════════════════════════════ */
 function OutlinedInput({
   label,
   value,
@@ -78,13 +86,11 @@ function OutlinedInput({
           transform: isActive ? "translateY(0)" : "translateY(-50%)",
           fontSize: isActive ? "0.7rem" : "0.95rem",
           color: focused ? BORDER_FOCUS : TEXT_MUTED,
-          background: "transparent",
           zIndex: 2,
         }}
       >
         {label}
       </span>
-
       <input
         className="w-full text-white outline-none rounded-xl font-light tracking-wide transition-all duration-200"
         style={{
@@ -92,7 +98,6 @@ function OutlinedInput({
           border: focused ? `2px solid ${BORDER_FOCUS}` : `1.5px solid ${BORDER_REST}`,
           padding: isActive ? "22px 16px 8px" : "16px 16px",
           fontSize: "0.95rem",
-          color: TEXT_WHITE,
         }}
         inputMode={inputMode}
         maxLength={maxLength}
@@ -115,6 +120,9 @@ function OutlinedInput({
   );
 }
 
+/* ═══════════════════════════════════════════════════════════
+   OUTLINED SELECT
+   ═══════════════════════════════════════════════════════════ */
 function OutlinedSelect({
   label,
   value,
@@ -175,6 +183,9 @@ function OutlinedSelect({
   );
 }
 
+/* ═══════════════════════════════════════════════════════════
+   ICONOS SVG INTERNOS
+   ═══════════════════════════════════════════════════════════ */
 function PasteIcon() {
   return (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -231,6 +242,9 @@ function LimitesIcon() {
   );
 }
 
+/* ═══════════════════════════════════════════════════════════
+   SCREEN 1: FORMULARIO
+   ═══════════════════════════════════════════════════════════ */
 function PaymentForm({ onPagar }: { onPagar: (data: FormData) => void }) {
   const [form, setForm] = useState<FormData>({
     documento: "",
@@ -341,13 +355,22 @@ function PaymentForm({ onPagar }: { onPagar: (data: FormData) => void }) {
         </div>
       </div>
 
+      {/* ═══ BARRA INFERIOR COMO IMAGEN (no funcional) ═══ */}
       <div className="relative flex-shrink-0" style={{ height: 70 }}>
-        <img src={navBarImage} alt="Navegación" className="w-full h-full object-cover object-top" draggable={false} />
+        <img
+          src={navBarImage}
+          alt="Navegación"
+          className="w-full h-full object-cover object-top"
+          draggable={false}
+        />
       </div>
     </div>
   );
 }
 
+/* ═══════════════════════════════════════════════════════════
+   SCREEN 2: COMPROBANTE
+   ═══════════════════════════════════════════════════════════ */
 function Comprobante({ data, onBack }: { data: FormData & { operacion: string }; onBack: () => void }) {
   const montoFormatted = (() => {
     const n = parseFloat(data.monto || "0");
@@ -417,6 +440,9 @@ function Comprobante({ data, onBack }: { data: FormData & { operacion: string };
   );
 }
 
+/* ═══════════════════════════════════════════════════════════
+   ROOT
+   ═══════════════════════════════════════════════════════════ */
 export default function App() {
   const [screen, setScreen] = useState<"form" | "comprobante">("form");
   const [receipt, setReceipt] = useState<(FormData & { operacion: string }) | null>(null);
