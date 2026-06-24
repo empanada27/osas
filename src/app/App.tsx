@@ -5,14 +5,15 @@ import navBarImage from "@/app/assets/nav-bar-bdv.png";
 import { ImageWithFallback } from "@/app/components/figma/ImageWithFallback";
 
 /* ═══════════════════════════════════════════════════════════
-   PALETA EXACTA
+   PALETA EXACTA RGB(33,33,33) = #212121
    ═══════════════════════════════════════════════════════════ */
-const BG_MAIN = "#2a2a2a";
-const FIELD_BG = "#3a3a3a";
-const BORDER_REST = "#666666";
-const BORDER_FOCUS = "#9333ea";
+const BG_MAIN = "#212121";        // Fondo general: RGB(33,33,33)
+const FIELD_BG = "#3d3d3d";       // Inputs: más claro para contraste
+const BORDER_REST = "#777777";    // Borde reposo
+const BORDER_FOCUS = "#a855f7";   // Lila al enfocar
 const BTN_PURPLE = "#7e22ce";
-const TEXT_MUTED = "#b0b0b0";
+const NAV_BG = "#71277a";
+const TEXT_MUTED = "#aaaaaa";     // Labels inputs
 
 /* ═══════════════════════════════════════════════════════════
    BANCOS
@@ -184,7 +185,7 @@ function OutlinedSelect({
 }
 
 /* ═══════════════════════════════════════════════════════════
-   ICONOS SVG INTERNOS
+   ICONOS SVG
    ═══════════════════════════════════════════════════════════ */
 function PasteIcon() {
   return (
@@ -355,12 +356,13 @@ function PaymentForm({ onPagar }: { onPagar: (data: FormData) => void }) {
         </div>
       </div>
 
-      {/* ═══ BARRA INFERIOR COMO IMAGEN (no funcional) ═══ */}
-      <div className="relative flex-shrink-0" style={{ height: 70 }}>
+      {/* ═══ BARRA INFERIOR ═══ */}
+      <div className="relative flex-shrink-0 w-full" style={{ background: NAV_BG }}>
         <img
           src={navBarImage}
           alt="Navegación"
-          className="w-full h-full object-cover object-top"
+          className="w-full"
+          style={{ height: "auto", display: "block", maxHeight: 90 }}
           draggable={false}
         />
       </div>
@@ -369,7 +371,7 @@ function PaymentForm({ onPagar }: { onPagar: (data: FormData) => void }) {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   SCREEN 2: COMPROBANTE
+   SCREEN 2: COMPROBANTE (LABELS EN BLANCO, FONDO #212121)
    ═══════════════════════════════════════════════════════════ */
 function Comprobante({ data, onBack }: { data: FormData & { operacion: string }; onBack: () => void }) {
   const montoFormatted = (() => {
@@ -388,53 +390,59 @@ function Comprobante({ data, onBack }: { data: FormData & { operacion: string };
   ];
 
   return (
-    <div className="flex flex-col h-full select-none" style={{ background: BG_MAIN }}>
-      <div className="flex items-center justify-between px-5 pt-5 pb-3">
+    <div className="flex flex-col h-full select-none" style={{ background: "#212121" }}>
+      {/* Header */}
+      <div className="flex items-center justify-between px-4 pt-6 pb-4">
         <button onClick={onBack} className="active:scale-90 transition-transform">
-          <ArrowLeft size={22} className="text-white" />
+          <ArrowLeft size={24} className="text-white" />
         </button>
-        <span className="font-normal text-white text-sm tracking-wide">Comprobante de operación</span>
+        <span className="font-medium text-white text-base tracking-wide">Comprobante de operación</span>
         <Share2 size={20} className="text-white opacity-90" />
       </div>
 
-      <div className="flex flex-col items-center gap-2 px-6 mt-1">
-        <ImageWithFallback src={bdvLogo} alt="BDV logo" className="object-contain" style={{ width: 60, height: 60 }} />
+      {/* Logo + Check */}
+      <div className="flex flex-col items-center gap-3 px-6 mt-2">
+        <ImageWithFallback src={bdvLogo} alt="BDV logo" className="object-contain" style={{ width: 56, height: 56 }} />
         <span className="text-white font-light text-sm tracking-wide">PagomóvilBDV Personas</span>
 
-        <div className="flex items-center justify-center rounded-full" style={{ width: 28, height: 28, background: "white" }}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-            <path d="M5 12l5 5L19 7" stroke="#222222" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+        <div className="flex items-center justify-center rounded-full" style={{ width: 24, height: 24, background: "white" }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+            <path d="M5 12l5 5L19 7" stroke="#212121" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </div>
 
-        <div className="w-full flex items-center justify-center rounded-xl py-2.5 mt-1" style={{ background: "#555555" }}>
-          <span className="text-white font-normal text-base tracking-wide">{montoFormatted} Bs</span>
+        {/* Monto */}
+        <div className="w-full flex items-center justify-center rounded-2xl py-3 mt-1" style={{ background: "#555555" }}>
+          <span className="text-white font-normal text-lg tracking-wide">{montoFormatted} Bs</span>
         </div>
       </div>
 
-      <div className="flex flex-col px-6 mt-5 flex-1 space-y-0.5">
+      {/* Datos: LABELS EN BLANCO (no gris) */}
+      <div className="flex flex-col px-6 mt-6 flex-1">
         {rows.map(({ label, value, copy }) => (
-          <div key={label} className="flex items-start justify-between py-2.5 text-xs font-light" style={{ borderBottom: "1px solid #3a3a3a" }}>
-            <span className="text-gray-400 flex-shrink-0 mr-4 tracking-wide">{label}</span>
-            <div className="flex items-center gap-1.5 flex-1 justify-end max-w-[65%]">
-              <span className="text-white text-right break-words tracking-wide">{value}</span>
-              {copy && <Copy size={13} style={{ color: "#888" }} />}
+          <div key={label} className="flex items-center justify-between py-4 text-sm">
+            <span className="text-white tracking-wide font-light">{label}</span>
+            <div className="flex items-center gap-2">
+              <span className="text-white text-right tracking-wide font-light">{value}</span>
+              {copy && <Copy size={14} style={{ color: "#888888" }} />}
             </div>
           </div>
         ))}
       </div>
 
-      <div className="flex justify-center py-5">
-        <button onClick={onBack} className="p-2.5 rounded-full" style={{ border: "1.5px solid #555" }}>
-          <ArrowLeft size={22} className="text-white" />
+      {/* Botón volver */}
+      <div className="flex justify-center py-6">
+        <button onClick={onBack} className="p-2 active:scale-90 transition-transform">
+          <ArrowLeft size={24} className="text-white" />
         </button>
       </div>
 
-      <div className="flex items-center justify-center gap-3 py-3 border-t border-zinc-700/50">
-        <div className="rounded-full relative" style={{ width: 36, height: 20, background: "#555", padding: 2 }}>
-          <div className="rounded-full" style={{ width: 16, height: 16, background: "#999", position: "absolute", left: 2, top: 2 }} />
+      {/* Toggle acceso directo */}
+      <div className="flex items-center justify-center gap-3 py-4" style={{ borderTop: "1px solid #2a2a2a" }}>
+        <div className="rounded-full relative" style={{ width: 40, height: 22, background: "#333333" }}>
+          <div className="rounded-full absolute" style={{ width: 18, height: 18, background: "#777777", top: 2, left: 2 }} />
         </div>
-        <span className="text-gray-400 text-xs font-light tracking-wide">Crear Acceso directo</span>
+        <span className="text-xs font-light tracking-wide" style={{ color: "#666666" }}>Crear Acceso directo</span>
       </div>
     </div>
   );
