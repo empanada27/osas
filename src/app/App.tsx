@@ -2,18 +2,21 @@ import { useState, useRef, useEffect } from "react";
 import { Bell, Menu, ChevronDown, ArrowLeft, Share2, Copy } from "lucide-react";
 import bdvLogo from "@/imports/logo-bdv.png";
 import navBarImage from "@/app/assets/nav-bar-bdv.png";
+import checkIcon from "@/app/assets/check-icon.png";        // ← TU CHECK DESDE CAPTURA
+import bottomBarImage from "@/app/assets/bottom-bar-receipt.png"; // ← BARRA INFERIOR COMPROBANTE
 import { ImageWithFallback } from "@/app/components/figma/ImageWithFallback";
 
 /* ═══════════════════════════════════════════════════════════
-   PALETA EXACTA RGB(33,33,33) = #212121
+   PALETTE
    ═══════════════════════════════════════════════════════════ */
-const BG_MAIN = "#212121";        // Fondo general: RGB(33,33,33)
-const FIELD_BG = "#3d3d3d";       // Inputs: más claro para contraste
-const BORDER_REST = "#777777";    // Borde reposo
-const BORDER_FOCUS = "#a855f7";   // Lila al enfocar
+const BG_FORM = "#303030";
+const BG_RECEIPT = "#212121";
+const FIELD_BG = "#454545";
+const BORDER_REST = "#777777";
+const BORDER_FOCUS = "#a855f7";
 const BTN_PURPLE = "#7e22ce";
 const NAV_BG = "#71277a";
-const TEXT_MUTED = "#aaaaaa";     // Labels inputs
+const TEXT_MUTED = "#aaaaaa";
 
 /* ═══════════════════════════════════════════════════════════
    BANCOS
@@ -52,6 +55,10 @@ interface FormData {
   telefono: string;
   monto: string;
   concepto: string;
+}
+
+interface ReceiptData extends FormData {
+  operacion: string;
 }
 
 function formatDate(d: Date) {
@@ -244,7 +251,7 @@ function LimitesIcon() {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   SCREEN 1: FORMULARIO
+   SCREEN 1: FORMULARIO (FONDO #303030)
    ═══════════════════════════════════════════════════════════ */
 function PaymentForm({ onPagar }: { onPagar: (data: FormData) => void }) {
   const [form, setForm] = useState<FormData>({
@@ -266,7 +273,7 @@ function PaymentForm({ onPagar }: { onPagar: (data: FormData) => void }) {
   }, []);
 
   return (
-    <div className="flex flex-col h-full select-none" style={{ background: BG_MAIN }}>
+    <div className="flex flex-col h-full select-none" style={{ background: BG_FORM }}>
       <div className="flex items-center justify-between px-4 pt-5 pb-2">
         <Bell size={20} style={{ color: "#ccc" }} />
         <span className="font-semibold text-white text-base tracking-wide">PagomóvilBDV</span>
@@ -289,7 +296,8 @@ function PaymentForm({ onPagar }: { onPagar: (data: FormData) => void }) {
         </div>
       </div>
 
-      <div className="flex flex-col gap-4 px-4 flex-1 overflow-y-auto pb-4">
+      {/* Contenido scrollable, deja espacio para la barra inferior fija */}
+      <div className="flex flex-col gap-4 px-4 flex-1 overflow-y-auto pb-24">
         <OutlinedSelect label="Operación:" value="Personas" open={false} onToggle={() => {}}>
           <></>
         </OutlinedSelect>
@@ -356,8 +364,11 @@ function PaymentForm({ onPagar }: { onPagar: (data: FormData) => void }) {
         </div>
       </div>
 
-      {/* ═══ BARRA INFERIOR ═══ */}
-      <div className="relative flex-shrink-0 w-full" style={{ background: NAV_BG }}>
+      {/* ═══ BARRA INFERIOR FIJA: no se mueve con el teclado ═══ */}
+      <div 
+        className="absolute bottom-0 left-0 right-0 z-50" 
+        style={{ background: NAV_BG }}
+      >
         <img
           src={navBarImage}
           alt="Navegación"
@@ -371,9 +382,9 @@ function PaymentForm({ onPagar }: { onPagar: (data: FormData) => void }) {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   SCREEN 2: COMPROBANTE (LABELS EN BLANCO, FONDO #212121)
+   SCREEN 2: COMPROBANTE (ALINEACION CORREGIDA)
    ═══════════════════════════════════════════════════════════ */
-function Comprobante({ data, onBack }: { data: FormData & { operacion: string }; onBack: () => void }) {
+function Comprobante({ data, onBack }: { data: ReceiptData; onBack: () => void }) {
   const montoFormatted = (() => {
     const n = parseFloat(data.monto || "0");
     return isNaN(n) ? "0,00" : n.toFixed(2).replace(".", ",");
@@ -390,59 +401,68 @@ function Comprobante({ data, onBack }: { data: FormData & { operacion: string };
   ];
 
   return (
-    <div className="flex flex-col h-full select-none" style={{ background: "#212121" }}>
+    <div className="flex flex-col h-full select-none relative" style={{ background: BG_RECEIPT }}>
       {/* Header */}
-      <div className="flex items-center justify-between px-4 pt-6 pb-4">
+      <div className="flex items-center justify-between px-4 pt-6 pb-3">
         <button onClick={onBack} className="active:scale-90 transition-transform">
           <ArrowLeft size={24} className="text-white" />
         </button>
-        <span className="font-medium text-white text-base tracking-wide">Comprobante de operación</span>
+        <span className="font-semibold text-white text-base tracking-wide" style={{ marginLeft: "-4px" }}>Comprobante de operación</span>
         <Share2 size={20} className="text-white opacity-90" />
       </div>
 
       {/* Logo + Check */}
-      <div className="flex flex-col items-center gap-3 px-6 mt-2">
+      <div className="flex flex-col items-center gap-2 px-6 mt-1">
         <ImageWithFallback src={bdvLogo} alt="BDV logo" className="object-contain" style={{ width: 56, height: 56 }} />
-        <span className="text-white font-light text-sm tracking-wide">PagomóvilBDV Personas</span>
+        <span className="text-white font-semibold text-base tracking-wide">PagomóvilBDV Personas</span>
 
-        <div className="flex items-center justify-center rounded-full" style={{ width: 24, height: 24, background: "white" }}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-            <path d="M5 12l5 5L19 7" stroke="#212121" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </div>
+        <img 
+          src={checkIcon} 
+          alt="Check" 
+          style={{ width: 24, height: 24 }} 
+          draggable={false}
+        />
 
-        {/* Monto */}
-        <div className="w-full flex items-center justify-center rounded-2xl py-3 mt-1" style={{ background: "#555555" }}>
-          <span className="text-white font-normal text-lg tracking-wide">{montoFormatted} Bs</span>
+        <div className="w-full flex items-center justify-center rounded-2xl py-3 mt-1" style={{ background: "#757575" }}>
+          <span className="text-white font-semibold text-lg tracking-wide">{montoFormatted} Bs</span>
         </div>
       </div>
 
-      {/* Datos: LABELS EN BLANCO (no gris) */}
-      <div className="flex flex-col px-6 mt-6 flex-1">
+      {/* Datos: items-start para alinear arriba, text-left en valores */}
+      <div className="flex flex-col px-6 mt-4 flex-1 overflow-y-auto pb-24">
         {rows.map(({ label, value, copy }) => (
-          <div key={label} className="flex items-center justify-between py-4 text-sm">
-            <span className="text-white tracking-wide font-light">{label}</span>
-            <div className="flex items-center gap-2">
-              <span className="text-white text-right tracking-wide font-light">{value}</span>
-              {copy && <Copy size={14} style={{ color: "#888888" }} />}
+          <div key={label} className="flex items-start justify-between py-2 text-sm">
+            <span className="text-white tracking-wide font-medium pt-0.5">{label}</span>
+            <div className="flex items-start gap-2 max-w-[80%]">
+              <span className="text-white text-right tracking-wide font-normal leading-relaxed">{value}</span>
+              {copy && (
+                <Copy 
+                  size={16} 
+                  strokeWidth={2.5}
+                  className="text-white flex-shrink-0 mt-0.5" 
+                />
+              )}
             </div>
           </div>
         ))}
       </div>
 
       {/* Botón volver */}
-      <div className="flex justify-center py-6">
+      <div className="flex justify-center py-5">
         <button onClick={onBack} className="p-2 active:scale-90 transition-transform">
           <ArrowLeft size={24} className="text-white" />
         </button>
       </div>
 
-      {/* Toggle acceso directo */}
-      <div className="flex items-center justify-center gap-3 py-4" style={{ borderTop: "1px solid #2a2a2a" }}>
-        <div className="rounded-full relative" style={{ width: 40, height: 22, background: "#333333" }}>
-          <div className="rounded-full absolute" style={{ width: 18, height: 18, background: "#777777", top: 2, left: 2 }} />
-        </div>
-        <span className="text-xs font-light tracking-wide" style={{ color: "#666666" }}>Crear Acceso directo</span>
+      {/* Barra inferior */}
+      <div className="w-full">
+        <img
+          src={bottomBarImage}
+          alt="Acceso directo"
+          className="w-full"
+          style={{ height: "auto", display: "block" }}
+          draggable={false}
+        />
       </div>
     </div>
   );
@@ -453,7 +473,7 @@ function Comprobante({ data, onBack }: { data: FormData & { operacion: string };
    ═══════════════════════════════════════════════════════════ */
 export default function App() {
   const [screen, setScreen] = useState<"form" | "comprobante">("form");
-  const [receipt, setReceipt] = useState<(FormData & { operacion: string }) | null>(null);
+  const [receipt, setReceipt] = useState<ReceiptData | null>(null);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-black">
