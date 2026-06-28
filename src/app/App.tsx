@@ -425,7 +425,7 @@ function Comprobante({ data, onBack }: { data: ReceiptData; onBack: () => void }
         <button onClick={onBack} className="active:scale-90 transition-transform bg-transparent border-none">
           <ArrowLeft size={24} className="text-white" />
         </button>
-        <span className="font-bold text-white tracking-wide text-g" style={{ marginLeft: "-60px" }}>Comprobante de operación</span>
+        <span className="font-bold text-white tracking-wide text-lg" style={{ marginLeft: "-60px" }}>Comprobante de operación</span>
         <Share2 size={20} className="text-white opacity-90" />
       </div>
 
