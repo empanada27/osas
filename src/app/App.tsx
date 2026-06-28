@@ -106,7 +106,7 @@ function OutlinedInput({
         style={{
           background: FIELD_BG,
           border: focused ? `2px solid ${BORDER_FOCUS}` : `2.5px solid ${BORDER_REST}`,
-          padding: isActive ? "16px 16px 8px" : "10px 16px",
+          padding: isActive ? "16px 16px 8px" : "12px 16px",
           fontSize: "0.95rem",
         }}
         inputMode={inputMode}
@@ -159,7 +159,7 @@ function OutlinedSelect({
         }}
       >
         <span
-          className="absolute left-4 top-1.5 text-xs pointer-events-none"
+          className="absolute left-4 top-1 text-xs pointer-events-none"
           style={{ color: open ? BORDER_FOCUS : TEXT_MUTED }}
         >
           {label}
@@ -290,9 +290,9 @@ function PaymentForm({ onPagar }: { onPagar: (data: FormData) => void }) {
 
   return (
     <div className="flex flex-col h-full select-none" style={{ background: BG_FORM }}>
-      <div className="flex items-center justify-between px-4 pt-5 pb-2">
+      <div className="flex items-center justify-between px-4 pt-2 pb-1">
         <Bell size={20} style={{ color: "#ccc" }} />
-        <span className="font-bold text-white text-base tracking-wide" style={{ marginLeft: "-160px" }}>
+        <span className="font-bold text-white text-lg tracking-wide" style={{ marginLeft: "-160px" }}>
           PagomóvilBDV
         </span>
         <Menu size={20} style={{ color: "#ccc" }} />
@@ -315,7 +315,7 @@ function PaymentForm({ onPagar }: { onPagar: (data: FormData) => void }) {
       </div>
 
       {/* Contenido scrollable */}
-      <div className={`flex flex-col gap-8 px-4 flex-1 overflow-y-auto ${keyboardVisible ? "pb-4" : "pb-24"}`}>
+      <div className={`flex flex-col gap-7 px-4 flex-1 overflow-y-auto ${keyboardVisible ? "pb-4" : "pb-24"}`}>
         <OutlinedSelect label="Operación:" value="Personas" open={false} onToggle={() => {}}>
           <></>
         </OutlinedSelect>
@@ -367,16 +367,16 @@ function PaymentForm({ onPagar }: { onPagar: (data: FormData) => void }) {
         <OutlinedInput label="Monto:" value={form.monto} onChange={(v) => setForm({ ...form, monto: v })} inputMode="decimal" />
         <OutlinedInput label="Concepto:" value={form.concepto} onChange={(v) => setForm({ ...form, concepto: v })} />
 
-        <div className="flex justify-center gap-5 mt-3">
-          <button className="px-10 py-3 rounded-2xl text-white font-bold text-sm tracking-wide active:scale-95 transition-transform" style={{ background: BTN_PURPLE }} onClick={() => onPagar(form)}>
+        <div className="flex justify-center gap-5 mt-0">
+          <button className="px-6 py-3 rounded-2xl text-white font-bold text-sm tracking-wide active:scale-95 transition-transform" style={{ background: BTN_PURPLE }} onClick={() => onPagar(form)}>
             Pagar
           </button>
-          <button className="px-10 py-3 rounded-2xl text-white font-bold text-sm tracking-wide active:scale-95 transition-transform" style={{ background: BTN_PURPLE }} onClick={() => setForm({ documento: "", banco: "0102 - BANCO DE VENEZUELA", telefono: "", monto: "", concepto: "" })}>
+          <button className="px-4 py-3 rounded-2xl text-white font-bold text-sm tracking-wide active:scale-95 transition-transform" style={{ background: BTN_PURPLE }} onClick={() => setForm({ documento: "", banco: "0102 - BANCO DE VENEZUELA", telefono: "", monto: "", concepto: "" })}>
             Limpiar
           </button>
         </div>
 
-        <div className="flex flex-col items-center gap-1 mt-3 mb-2">
+        <div className="flex flex-col items-center gap-1 mt-0 mb-2">
           <LimitesIcon />
           <span className="text-xs tracking-wide font-bold" style={{ color: "#622d87" }}>Límites de operaciones</span>
         </div>
@@ -450,9 +450,9 @@ function Comprobante({ data, onBack }: { data: ReceiptData; onBack: () => void }
       <div className="flex flex-col px-8 mt-4 flex-1 overflow-y-auto pb-24">
         {rows.map(({ label, value, copy }) => (
           <div key={label} className="flex items-start justify-between py-1.5 text-sm">
-            <span className="text-white tracking-wide font-bold pt-0.5 text-s">{label}</span>
+            <span className="text-white tracking-wide font-bold pt-0.5 text-xs">{label}</span>
             <div className="flex items-start gap-2 max-w-[80%]">
-              <span className="text-white text-right tracking-wide font-normal leading-relaxed text-s">{value}</span>
+              <span className="text-white text-right tracking-wide font-normal leading-relaxed text-xs">{value}</span>
               {copy && (
                 <Copy 
                   size={16} 
