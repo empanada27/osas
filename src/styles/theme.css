@@ -44,6 +44,9 @@ body {
   color: var(--foreground);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* evita scroll lateral */
 }
 
 /* Inputs: SÍ llevan fondo de formulario */

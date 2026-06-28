@@ -421,18 +421,18 @@ function Comprobante({ data, onBack }: { data: ReceiptData; onBack: () => void }
   return (
     <div className="flex flex-col h-full select-none relative" style={{ background: BG_RECEIPT }}>
             {/* Header */}
-      <div className="flex items-center justify-between px-4 pt-2.5 pb-3">
+      <div className="flex items-center justify-between px-4 pt-4 pb-6">
         <button onClick={onBack} className="active:scale-90 transition-transform bg-transparent border-none">
           <ArrowLeft size={24} className="text-white" />
         </button>
-        <span className="font-bold text-white tracking-wide text-g" style={{ marginLeft: "-40px" }}>Comprobante de operación</span>
+        <span className="font-bold text-white tracking-wide text-g" style={{ marginLeft: "-60px" }}>Comprobante de operación</span>
         <Share2 size={20} className="text-white opacity-90" />
       </div>
 
       {/* Logo + Check */}
       <div className="flex flex-col items-center gap-2 px-6 pt-4 mt-1">
         <ImageWithFallback src={bdvLogo} alt="BDV logo" className="object-contain" style={{ width: 56, height: 56 }} />
-        <span className="text-white font-semibold text-base tracking-wide">PagomóvilBDV Personas</span>
+        <span className="text-white font-semibold text-lg tracking-wide">PagomóvilBDV Personas</span>
 
         <img 
           src={checkIcon} 
@@ -441,18 +441,18 @@ function Comprobante({ data, onBack }: { data: ReceiptData; onBack: () => void }
           draggable={false}
         />
 
-        <div className="w-full flex items-center justify-center rounded-2xl py-3 mt-1" style={{ background: "#757575" }}>
-          <span className="text-white font-semibold text-lg tracking-wide">{montoFormatted} Bs</span>
+        <div className="w-full flex items-center justify-center rounded-2xl py-2.5 mt-1" style={{ background: "#757575" }}>
+          <span className="text-white font-bold text-lg tracking-wide">{montoFormatted} Bs</span>
         </div>
       </div>
 
       {/* Datos: items-start para alinear arriba, text-left en valores */}
-      <div className="flex flex-col px-6 mt-4 flex-1 overflow-y-auto pb-24">
+      <div className="flex flex-col px-8 mt-4 flex-1 overflow-y-auto pb-24">
         {rows.map(({ label, value, copy }) => (
-          <div key={label} className="flex items-start justify-between py-1 text-sm">
-            <span className="text-white tracking-wide font-bold pt-0.5 text-xs">{label}</span>
+          <div key={label} className="flex items-start justify-between py-1.5 text-sm">
+            <span className="text-white tracking-wide font-bold pt-0.5 text-s">{label}</span>
             <div className="flex items-start gap-2 max-w-[80%]">
-              <span className="text-white text-right tracking-wide font-normal leading-relaxed text-xs">{value}</span>
+              <span className="text-white text-right tracking-wide font-normal leading-relaxed text-s">{value}</span>
               {copy && (
                 <Copy 
                   size={16} 
@@ -493,11 +493,14 @@ export default function App() {
   const [screen, setScreen] = useState<"form" | "comprobante">("form");
   const [receipt, setReceipt] = useState<ReceiptData | null>(null);
 
-    return (
+  return (
     <div className="flex items-center justify-center min-h-screen bg-black">
       <div 
-        className="relative flex flex-col overflow-hidden shadow-2xl" 
-        style={{ width: 390, height: 844, maxHeight: "100dvh" }}
+        className="relative flex flex-col overflow-hidden shadow-2xl w-full" 
+        style={{ 
+          maxWidth: 430,        // ← límite en desktop, en móvil se ignora
+          height: "100dvh",    // ← ocupa toda la altura del dispositivo
+        }}
       >
         {screen === "form" ? (
           <PaymentForm onPagar={(d) => {
