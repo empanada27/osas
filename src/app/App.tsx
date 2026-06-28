@@ -441,18 +441,18 @@ function Comprobante({ data, onBack }: { data: ReceiptData; onBack: () => void }
           draggable={false}
         />
 
-        <div className="w-full flex items-center justify-center rounded-2xl py-2.5 mt-1" style={{ background: "#757575" }}>
+        <div className="w-full flex items-center justify-center rounded-2xl py-2 mt-1" style={{ background: "#757575" }}>
           <span className="text-white font-bold text-lg tracking-wide">{montoFormatted} Bs</span>
         </div>
       </div>
 
       {/* Datos: items-start para alinear arriba, text-left en valores */}
-      <div className="flex flex-col px-8 mt-4 flex-1 overflow-y-auto pb-24">
+      <div className="flex flex-col px-8 mt-2.5 flex-1 overflow-y-auto pb-24">
         {rows.map(({ label, value, copy }) => (
           <div key={label} className="flex items-start justify-between py-1.5 text-sm">
-            <span className="text-white tracking-wide font-bold pt-0.5 text-xs">{label}</span>
+            <span className="text-white tracking-wide font-bold pt-0.5 text-s">{label}</span>
             <div className="flex items-start gap-2 max-w-[80%]">
-              <span className="text-white text-right tracking-wide font-normal leading-relaxed text-xs">{value}</span>
+              <span className="text-white text-right tracking-wide font-normal leading-relaxed text-s">{value}</span>
               {copy && (
                 <Copy 
                   size={16} 
