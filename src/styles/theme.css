@@ -1,39 +1,27 @@
-@import "tailwindcss";
-
-@custom-variant dark (&:is(.dark *));
-
 :root {
   --font-size: 16px;
-  
-  /* Paleta Oscura Principal del BNC */
-  --background: #121212; 
+  --background: #121212;
   --foreground: #ffffff;
-  
-  /* Tarjetas y contenedores de formularios */
   --card: #1a1a1a;
   --card-foreground: #ffffff;
-  
   --popover: #1a1a1a;
   --popover-foreground: #ffffff;
-  
-  /* Acentos de interfaz */
   --primary: #ffffff;
   --primary-foreground: #121212;
-  
-  /* Inputs, bordes y separadores sutiles */
   --border: #333333;
   --input: #121212;
   --input-background: #1a1a1a;
-  
   --muted: #262626;
   --muted-foreground: #a3a3a3;
-  
   --font-weight-medium: 500;
   --font-weight-normal: 400;
   --radius: 0.625rem;
 }
 
 @theme inline {
+  /* ═══ FUENTE GLOBAL (vía Tailwind v4) ═══ */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -47,30 +35,35 @@
   --color-input-background: var(--input-background);
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
+html {
+  font-size: var(--font-size);
+}
 
-  body {
-    @apply bg-background text-foreground antialiased;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  }
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
-  html {
-    font-size: var(--font-size);
-  }
+/* Inputs: SÍ llevan fondo de formulario */
+input,
+select,
+textarea {
+  background-color: var(--input-background);
+  color: var(--foreground);
+  border-color: var(--border);
+}
 
-  /* Reset nativo para inputs en tema oscuro */
-  input, select, textarea {
-    @apply bg-input-background text-foreground border-border;
-  }
+/* Botones: heredan fuente pero SIN fondo forzado */
+button {
+  background-color: transparent;
+  background-image: none;
+}
 
-  /* Remover estilos por defecto de select en móviles y añadir flecha blanca */
-  select {
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
-    background-repeat: no-repeat;
-    background-position: right 1rem center;
-    background-size: 1.2em;
-  }
+select {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1.2em;
 }

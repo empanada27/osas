@@ -6,15 +6,17 @@ import checkIcon from "@/app/assets/check-icon.png";        // ← TU CHECK DESD
 import bottomBarImage from "@/app/assets/bottom-bar-receipt.png"; // ← BARRA INFERIOR COMPROBANTE
 import { ImageWithFallback } from "@/app/components/figma/ImageWithFallback";
 
+
+
 /* ═══════════════════════════════════════════════════════════
    PALETTE
    ═══════════════════════════════════════════════════════════ */
 const BG_FORM = "#303030";
 const BG_RECEIPT = "#212121";
 const FIELD_BG = "#454545";
-const BORDER_REST = "#777777";
-const BORDER_FOCUS = "#a855f7";
-const BTN_PURPLE = "#7e22ce";
+const BORDER_REST = "#9d9d9d";
+const BORDER_FOCUS = "#622d87";
+const BTN_PURPLE = "#622d87";
 const NAV_BG = "#71277a";
 const TEXT_MUTED = "#aaaaaa";
 
@@ -103,8 +105,8 @@ function OutlinedInput({
         className="w-full text-white outline-none rounded-xl font-light tracking-wide transition-all duration-200"
         style={{
           background: FIELD_BG,
-          border: focused ? `2px solid ${BORDER_FOCUS}` : `1.5px solid ${BORDER_REST}`,
-          padding: isActive ? "22px 16px 8px" : "16px 16px",
+          border: focused ? `2px solid ${BORDER_FOCUS}` : `2.5px solid ${BORDER_REST}`,
+          padding: isActive ? "16px 16px 8px" : "10px 16px",
           fontSize: "0.95rem",
         }}
         inputMode={inputMode}
@@ -152,8 +154,8 @@ function OutlinedSelect({
         className="w-full text-left rounded-xl transition-all duration-200 relative"
         style={{
           background: FIELD_BG,
-          border: open ? `2px solid ${BORDER_FOCUS}` : `1.5px solid ${BORDER_REST}`,
-          padding: "22px 16px 8px",
+          border: open ? `2px solid ${BORDER_FOCUS}` : `2.5px solid ${BORDER_REST}`,
+          padding: "20px 16px 8px",
         }}
       >
         <span
@@ -236,22 +238,22 @@ function PersonSearchIcon() {
 function LimitesIcon() {
   return (
     <svg width="48" height="48" viewBox="0 0 56 56" fill="none">
-      <rect x="16" y="6" width="22" height="36" rx="3" stroke="#a855f7" strokeWidth="1.5" />
-      <rect x="20" y="11" width="14" height="24" rx="1.5" stroke="#a855f7" strokeWidth="1.2" />
-      <circle cx="27" cy="23" r="6" stroke="#a855f7" strokeWidth="1.3" />
-      <line x1="27" y1="19" x2="27" y2="23" stroke="#a855f7" strokeWidth="1.2" strokeLinecap="round" />
-      <line x1="27" y1="23" x2="30" y2="23" stroke="#a855f7" strokeWidth="1.2" strokeLinecap="round" />
+      <rect x="16" y="6" width="22" height="36" rx="3" stroke="#622d87" strokeWidth="1.5" />
+      <rect x="20" y="11" width="14" height="24" rx="1.5" stroke="#622d87" strokeWidth="1.2" />
+      <circle cx="27" cy="23" r="6" stroke="#622d87" strokeWidth="1.3" />
+      <line x1="27" y1="19" x2="27" y2="23" stroke="#622d87" strokeWidth="1.2" strokeLinecap="round" />
+      <line x1="27" y1="23" x2="30" y2="23" stroke="#622d87" strokeWidth="1.2" strokeLinecap="round" />
       <circle cx="27" cy="38" r="1.5" stroke="#a855f7" strokeWidth="1.2" />
-      <path d="M13 40 Q11 45 16 47 L38 47 Q43 47 44 43 Q45 40 42 38" stroke="#a855f7" strokeWidth="1.4" strokeLinecap="round" fill="none" />
-      <line x1="22" y1="42" x2="22" y2="47" stroke="#a855f7" strokeWidth="1.2" strokeLinecap="round" />
-      <line x1="27" y1="42" x2="27" y2="47" stroke="#a855f7" strokeWidth="1.2" strokeLinecap="round" />
-      <line x1="32" y1="42" x2="32" y2="47" stroke="#a855f7" strokeWidth="1.2" strokeLinecap="round" />
+      <path d="M13 40 Q11 45 16 47 L38 47 Q43 47 44 43 Q45 40 42 38" stroke="#622d87" strokeWidth="1.4" strokeLinecap="round" fill="none" />
+      <line x1="22" y1="42" x2="22" y2="47" stroke="#622d87" strokeWidth="1.2" strokeLinecap="round" />
+      <line x1="27" y1="42" x2="27" y2="47" stroke="#622d87" strokeWidth="1.2" strokeLinecap="round" />
+      <line x1="32" y1="42" x2="32" y2="47" stroke="#622d87" strokeWidth="1.2" strokeLinecap="round" />
     </svg>
   );
 }
 
 /* ═══════════════════════════════════════════════════════════
-   SCREEN 1: FORMULARIO (FONDO #303030)
+   SCREEN 1: FORMULARIO
    ═══════════════════════════════════════════════════════════ */
 function PaymentForm({ onPagar }: { onPagar: (data: FormData) => void }) {
   const [form, setForm] = useState<FormData>({
@@ -262,11 +264,25 @@ function PaymentForm({ onPagar }: { onPagar: (data: FormData) => void }) {
     concepto: "",
   });
   const [bankOpen, setBankOpen] = useState(false);
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
   const bankRef = useRef<HTMLDivElement>(null);
+
+  /* Detecta teclado virtual vía Visual Viewport API */
+  useEffect(() => {
+    const onResize = () => {
+      const vh = window.visualViewport?.height ?? window.innerHeight;
+      const ih = window.innerHeight;
+      setKeyboardVisible(vh < ih - 100);
+    };
+    window.visualViewport?.addEventListener("resize", onResize);
+    onResize();
+    return () => window.visualViewport?.removeEventListener("resize", onResize);
+  }, []);
 
   useEffect(() => {
     function h(e: MouseEvent) {
-      if (bankRef.current && !bankRef.current.contains(e.target as Node)) setBankOpen(false);
+      if (bankRef.current && !bankRef.current.contains(e.target as Node))
+        setBankOpen(false);
     }
     document.addEventListener("mousedown", h);
     return () => document.removeEventListener("mousedown", h);
@@ -276,7 +292,9 @@ function PaymentForm({ onPagar }: { onPagar: (data: FormData) => void }) {
     <div className="flex flex-col h-full select-none" style={{ background: BG_FORM }}>
       <div className="flex items-center justify-between px-4 pt-5 pb-2">
         <Bell size={20} style={{ color: "#ccc" }} />
-        <span className="font-semibold text-white text-base tracking-wide">PagomóvilBDV</span>
+        <span className="font-bold text-white text-base tracking-wide" style={{ marginLeft: "-160px" }}>
+          PagomóvilBDV
+        </span>
         <Menu size={20} style={{ color: "#ccc" }} />
       </div>
 
@@ -285,19 +303,19 @@ function PaymentForm({ onPagar }: { onPagar: (data: FormData) => void }) {
           <div className="w-9 h-9 rounded-full flex items-center justify-center" style={{ background: BTN_PURPLE }}>
             <PasteIcon />
           </div>
-          <span className="text-white text-xs font-light">Pegar datos</span>
+          <span className="text-white text-xs font-bold">Pegar datos</span>
         </div>
         <div className="flex-1" />
         <div className="flex items-center gap-2">
-          <span className="text-white text-xs font-light">Leer datos</span>
+          <span className="text-white text-xs font-bold">Leer datos</span>
           <div className="w-9 h-9 rounded-full flex items-center justify-center" style={{ background: BTN_PURPLE }}>
             <QrIcon />
           </div>
         </div>
       </div>
 
-      {/* Contenido scrollable, deja espacio para la barra inferior fija */}
-      <div className="flex flex-col gap-4 px-4 flex-1 overflow-y-auto pb-24">
+      {/* Contenido scrollable */}
+      <div className={`flex flex-col gap-4 px-4 flex-1 overflow-y-auto ${keyboardVisible ? "pb-4" : "pb-24"}`}>
         <OutlinedSelect label="Operación:" value="Personas" open={false} onToggle={() => {}}>
           <></>
         </OutlinedSelect>
@@ -350,23 +368,23 @@ function PaymentForm({ onPagar }: { onPagar: (data: FormData) => void }) {
         <OutlinedInput label="Concepto:" value={form.concepto} onChange={(v) => setForm({ ...form, concepto: v })} />
 
         <div className="flex justify-center gap-5 mt-3">
-          <button className="px-10 py-3 rounded-2xl text-white font-medium text-sm tracking-wide active:scale-95 transition-transform" style={{ background: BTN_PURPLE }} onClick={() => onPagar(form)}>
+          <button className="px-10 py-3 rounded-2xl text-white font-bold text-sm tracking-wide active:scale-95 transition-transform" style={{ background: BTN_PURPLE }} onClick={() => onPagar(form)}>
             Pagar
           </button>
-          <button className="px-10 py-3 rounded-2xl text-white font-medium text-sm tracking-wide active:scale-95 transition-transform" style={{ background: BTN_PURPLE }} onClick={() => setForm({ documento: "", banco: "0102 - BANCO DE VENEZUELA", telefono: "", monto: "", concepto: "" })}>
+          <button className="px-10 py-3 rounded-2xl text-white font-bold text-sm tracking-wide active:scale-95 transition-transform" style={{ background: BTN_PURPLE }} onClick={() => setForm({ documento: "", banco: "0102 - BANCO DE VENEZUELA", telefono: "", monto: "", concepto: "" })}>
             Limpiar
           </button>
         </div>
 
         <div className="flex flex-col items-center gap-1 mt-3 mb-2">
           <LimitesIcon />
-          <span className="text-xs tracking-wide" style={{ color: "#a855f7" }}>Límites de operaciones</span>
+          <span className="text-xs tracking-wide font-bold" style={{ color: "#622d87" }}>Límites de operaciones</span>
         </div>
       </div>
 
-      {/* ═══ BARRA INFERIOR FIJA: no se mueve con el teclado ═══ */}
-      <div 
-        className="absolute bottom-0 left-0 right-0 z-50" 
+      {/* Barra inferior: se oculta cuando el teclado está abierto */}
+      <div
+        className={`absolute bottom-0 left-0 right-0 z-50 transition-transform duration-300 ease-out ${keyboardVisible ? "translate-y-full" : ""}`}
         style={{ background: NAV_BG }}
       >
         <img
@@ -402,17 +420,17 @@ function Comprobante({ data, onBack }: { data: ReceiptData; onBack: () => void }
 
   return (
     <div className="flex flex-col h-full select-none relative" style={{ background: BG_RECEIPT }}>
-      {/* Header */}
-      <div className="flex items-center justify-between px-4 pt-6 pb-3">
-        <button onClick={onBack} className="active:scale-90 transition-transform">
+            {/* Header */}
+      <div className="flex items-center justify-between px-4 pt-2.5 pb-3">
+        <button onClick={onBack} className="active:scale-90 transition-transform bg-transparent border-none">
           <ArrowLeft size={24} className="text-white" />
         </button>
-        <span className="font-semibold text-white text-base tracking-wide" style={{ marginLeft: "-4px" }}>Comprobante de operación</span>
+        <span className="font-bold text-white tracking-wide text-g" style={{ marginLeft: "-40px" }}>Comprobante de operación</span>
         <Share2 size={20} className="text-white opacity-90" />
       </div>
 
       {/* Logo + Check */}
-      <div className="flex flex-col items-center gap-2 px-6 mt-1">
+      <div className="flex flex-col items-center gap-2 px-6 pt-4 mt-1">
         <ImageWithFallback src={bdvLogo} alt="BDV logo" className="object-contain" style={{ width: 56, height: 56 }} />
         <span className="text-white font-semibold text-base tracking-wide">PagomóvilBDV Personas</span>
 
@@ -431,10 +449,10 @@ function Comprobante({ data, onBack }: { data: ReceiptData; onBack: () => void }
       {/* Datos: items-start para alinear arriba, text-left en valores */}
       <div className="flex flex-col px-6 mt-4 flex-1 overflow-y-auto pb-24">
         {rows.map(({ label, value, copy }) => (
-          <div key={label} className="flex items-start justify-between py-2 text-sm">
-            <span className="text-white tracking-wide font-medium pt-0.5">{label}</span>
+          <div key={label} className="flex items-start justify-between py-1 text-sm">
+            <span className="text-white tracking-wide font-bold pt-0.5 text-xs">{label}</span>
             <div className="flex items-start gap-2 max-w-[80%]">
-              <span className="text-white text-right tracking-wide font-normal leading-relaxed">{value}</span>
+              <span className="text-white text-right tracking-wide font-normal leading-relaxed text-xs">{value}</span>
               {copy && (
                 <Copy 
                   size={16} 
@@ -447,9 +465,9 @@ function Comprobante({ data, onBack }: { data: ReceiptData; onBack: () => void }
         ))}
       </div>
 
-      {/* Botón volver */}
+            {/* Botón volver */}
       <div className="flex justify-center py-5">
-        <button onClick={onBack} className="p-2 active:scale-90 transition-transform">
+        <button onClick={onBack} className="p-1 active:scale-90 transition-transform bg-transparent border-none">
           <ArrowLeft size={24} className="text-white" />
         </button>
       </div>
@@ -475,9 +493,12 @@ export default function App() {
   const [screen, setScreen] = useState<"form" | "comprobante">("form");
   const [receipt, setReceipt] = useState<ReceiptData | null>(null);
 
-  return (
+    return (
     <div className="flex items-center justify-center min-h-screen bg-black">
-      <div className="relative flex flex-col overflow-hidden shadow-2xl" style={{ width: 390, height: 844, maxHeight: "100dvh" }}>
+      <div 
+        className="relative flex flex-col overflow-hidden shadow-2xl" 
+        style={{ width: 390, height: 844, maxHeight: "100dvh" }}
+      >
         {screen === "form" ? (
           <PaymentForm onPagar={(d) => {
             const op = "00" + Array.from({ length: 10 }, () => Math.floor(Math.random() * 10)).join("");
