@@ -315,7 +315,7 @@ function PaymentForm({ onPagar }: { onPagar: (data: FormData) => void }) {
       </div>
 
       {/* Contenido scrollable */}
-      <div className={`flex flex-col gap-4 px-4 flex-1 overflow-y-auto ${keyboardVisible ? "pb-4" : "pb-24"}`}>
+      <div className={`flex flex-col gap-8 px-4 flex-1 overflow-y-auto ${keyboardVisible ? "pb-4" : "pb-24"}`}>
         <OutlinedSelect label="Operación:" value="Personas" open={false} onToggle={() => {}}>
           <></>
         </OutlinedSelect>
