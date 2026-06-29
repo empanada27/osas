@@ -290,7 +290,7 @@ function PaymentForm({ onPagar }: { onPagar: (data: FormData) => void }) {
 
   return (
     <div className="flex flex-col h-full select-none" style={{ background: BG_FORM }}>
-      <div className="flex items-center justify-between px-4 pt-2 pb-1">
+      <div className="flex items-center justify-between px-4 pt-2.5 pb-1">
         <Bell size={20} style={{ color: "#ccc" }} />
         <span className="font-bold text-white text-lg tracking-wide" style={{ marginLeft: "-160px" }}>
           PagomóvilBDV
@@ -450,9 +450,9 @@ function Comprobante({ data, onBack }: { data: ReceiptData; onBack: () => void }
       <div className="flex flex-col px-8 mt-2.5 flex-1 overflow-y-auto pb-24">
         {rows.map(({ label, value, copy }) => (
           <div key={label} className="flex items-start justify-between py-1.5 text-sm">
-            <span className="text-white tracking-wide font-bold pt-0.5 text-s">{label}</span>
+            <span className="text-white tracking-wide font-semibold pt-0.5 text-s">{label}</span>
             <div className="flex items-start gap-2 max-w-[80%]">
-              <span className="text-white text-right tracking-wide font-normal leading-relaxed text-s">{value}</span>
+              <span className="text-white text-right tracking-wide leading-relaxed text-s">{value}</span>
               {copy && (
                 <Copy 
                   size={16} 
