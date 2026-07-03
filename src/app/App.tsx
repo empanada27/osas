@@ -415,7 +415,7 @@ function Comprobante({ data, onBack }: { data: ReceiptData; onBack: () => void }
     { label: "Origen:", value: "0102****4255" },
     { label: "Destino:", value: data.telefono },
     { label: "Banco:", value: data.banco },
-    { label: "Concepto:", value: data.concepto || "eme" },
+    { label: "Concepto:", value: data.concepto || "mmmm" },
   ];
 
   return (
@@ -441,8 +441,8 @@ function Comprobante({ data, onBack }: { data: ReceiptData; onBack: () => void }
           draggable={false}
         />
 
-        <div className="w-full flex items-center justify-center rounded-2xl py-2 mt-1" style={{ background: "#757575" }}>
-          <span className="text-white font-bold text-lg tracking-wide">{montoFormatted} Bs</span>
+        <div className="w-full flex items-center justify-center rounded-lg py-2 mt-1" style={{ background: "#757575" }}>
+          <span className="text-white font-semibold text-lg tracking-wide">{montoFormatted} Bs</span>
         </div>
       </div>
 
