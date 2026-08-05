@@ -2,11 +2,9 @@ import { useState, useRef, useEffect } from "react";
 import { Bell, Menu, ChevronDown, ArrowLeft, Share2, Copy } from "lucide-react";
 import bdvLogo from "@/imports/logo-bdv.png";
 import navBarImage from "@/app/assets/nav-bar-bdv.png";
-import checkIcon from "@/app/assets/check-icon.png";        // ← TU CHECK DESDE CAPTURA
-import bottomBarImage from "@/app/assets/bottom-bar-receipt.png"; // ← BARRA INFERIOR COMPROBANTE
+import checkIcon from "@/app/assets/check-icon.png";
+import bottomBarImage from "@/app/assets/bottom-bar-receipt.png";
 import { ImageWithFallback } from "@/app/components/figma/ImageWithFallback";
-
-
 
 /* ═══════════════════════════════════════════════════════════
    PALETTE
@@ -116,12 +114,20 @@ function OutlinedInput({
         onBlur={() => setFocused(false)}
         onChange={(e) => {
           let v = e.target.value;
-          if (inputMode === "numeric") v = v.replace(/\D/g, "");
+          
+          if (inputMode === "numeric") {
+            v = v.replace(/\D/g, "");
+          }
+          
           if (inputMode === "decimal") {
-            v = v.replace(/[^0-9.]/g, "");
+            // Permitir números, puntos y comas
+            v = v.replace(/[^0-9.,]/g, "");
+            // Reemplazar la coma por punto para el manejo interno del estado
+            v = v.replace(",", ".");
             const parts = v.split(".");
             if (parts.length > 2) v = parts[0] + "." + parts.slice(1).join("");
           }
+          
           if (maxLength) v = v.slice(0, maxLength);
           onChange(v);
         }}
@@ -382,9 +388,9 @@ function PaymentForm({ onPagar }: { onPagar: (data: FormData) => void }) {
         </div>
       </div>
 
-      {/* Barra inferior: se oculta cuando el teclado está abierto */}
+      {/* Barra inferior: se oculta por completo cuando el teclado está abierto en lugar de levantar */}
       <div
-        className={`absolute bottom-0 left-0 right-0 z-50 transition-transform duration-300 ease-out ${keyboardVisible ? "translate-y-full" : ""}`}
+        className={`absolute bottom-0 left-0 right-0 z-50 ${keyboardVisible ? "hidden" : "block"}`}
         style={{ background: NAV_BG }}
       >
         <img
@@ -405,7 +411,10 @@ function PaymentForm({ onPagar }: { onPagar: (data: FormData) => void }) {
 function Comprobante({ data, onBack }: { data: ReceiptData; onBack: () => void }) {
   const montoFormatted = (() => {
     const n = parseFloat(data.monto || "0");
-    return isNaN(n) ? "0,00" : n.toFixed(2).replace(".", ",");
+    if (isNaN(n)) return "0,00";
+    // Forzamos el separador de miles con punto y el decimal con coma
+    const [intPart, decPart] = n.toFixed(2).split(".");
+    return intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".") + "," + decPart;
   })();
 
   const rows = [
@@ -446,13 +455,13 @@ function Comprobante({ data, onBack }: { data: ReceiptData; onBack: () => void }
         </div>
       </div>
 
-      {/* Datos: items-start para alinear arriba, text-left en valores */}
+      {/* Datos: Ajustado el peso y tamaño de la fuente de 'text-s' a 'text-sm' y pesos a normal/medium para el match perfecto */}
       <div className="flex flex-col px-8 mt-2.5 flex-1 overflow-y-auto pb-24">
         {rows.map(({ label, value, copy }) => (
           <div key={label} className="flex items-start justify-between py-1.5 text-sm">
-            <span className="text-white tracking-wide font-semibold pt-0.5 text-s">{label}</span>
+            <span className="text-[#cccccc] tracking-wide font-normal pt-0.5 text-sm">{label}</span>
             <div className="flex items-start gap-2 max-w-[80%]">
-              <span className="text-white text-right tracking-wide leading-relaxed text-s">{value}</span>
+              <span className="text-white text-right tracking-wide leading-relaxed font-medium text-sm">{value}</span>
               {copy && (
                 <Copy 
                   size={16} 
@@ -494,12 +503,13 @@ export default function App() {
   const [receipt, setReceipt] = useState<ReceiptData | null>(null);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-black">
+    // Agregado Roboto como fuente primaria en el contenedor root
+    <div className="flex items-center justify-center min-h-screen bg-black" style={{ fontFamily: "'Roboto', 'Helvetica Neue', Arial, sans-serif" }}>
       <div 
         className="relative flex flex-col overflow-hidden shadow-2xl w-full" 
         style={{ 
-          maxWidth: 430,        // ← límite en desktop, en móvil se ignora
-          height: "100dvh",    // ← ocupa toda la altura del dispositivo
+          maxWidth: 430,
+          height: "100dvh",
         }}
       >
         {screen === "form" ? (
