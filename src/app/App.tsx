@@ -451,7 +451,7 @@ function Comprobante({ data, onBack }: { data: ReceiptData; onBack: () => void }
         />
 
         <div className="w-full flex items-center justify-center rounded-lg py-2 mt-1" style={{ background: "#757575" }}>
-          <span className="text-white font-semibold text-lg tracking-wide">{montoFormatted} Bs</span>
+          <span className="text-white font-normal text-lg tracking-wide">{montoFormatted} Bs</span>
         </div>
       </div>
 
@@ -459,7 +459,7 @@ function Comprobante({ data, onBack }: { data: ReceiptData; onBack: () => void }
       <div className="flex flex-col px-8 mt-2.5 flex-1 overflow-y-auto pb-24">
         {rows.map(({ label, value, copy }) => (
           <div key={label} className="flex items-start justify-between py-1.5 text-sm">
-            <span className="tracking-wide font-semibold pt-0.5 text-sm">{label}</span>
+            <span className="tracking-wide font-normal pt-0.5 text-sm">{label}</span>
             <div className="flex items-start gap-2 max-w-[80%]">
               <span className="text-white text-right tracking-wide leading-relaxed font-normal text-sm">{value}</span>
               {copy && (
